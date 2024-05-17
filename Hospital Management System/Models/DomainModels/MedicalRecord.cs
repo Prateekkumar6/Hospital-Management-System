@@ -1,27 +1,28 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 
-namespace Hospital_Management_System.Models
+namespace Hospital_Management_System.Models.DomainModels
 {
-    public class Appointment
+    public class MedicalRecord
     {
         public Guid Id { get; set; }
 
-        public DateTime AppointedDate{ get; set; }
+        public string Diganosis { get; set; }
 
-        public string Status { get; set; }
+        public string Treatment { get; set; }
         [Required]
         [MaxLength(100, ErrorMessage = "Please Enter PateintId")]
+
         public Guid PatientId { get; set; }
         [Required]
         [MaxLength(100, ErrorMessage = "Please Enter DcotorId")]
         public string DoctorId { get; set; }
 
-        //Navigation Properties::::
 
-        public Doctor? Doctor { get; set; }  
+        //Navigation Properties ::
 
-        public Patient?Patient { get; set; }  
+        public Doctor? DoctorList { get; set; }
+
+        public Patient? Patient { get; set; }
 
     }
 }

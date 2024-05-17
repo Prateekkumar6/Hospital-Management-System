@@ -1,9 +1,11 @@
 ﻿using Hospital_Management_System.Data;
-using Hospital_Management_System.Models;
 using Hospital_Management_System.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Hospital_Management_System.ActionFilters;
+using Hospital_Management_System.Models.DomainModels;
+using AutoMapper;
+using Hospital_Management_System.Models.DTO;
 
 namespace Hospital_Management_System.Controllers
 {
@@ -13,23 +15,27 @@ namespace Hospital_Management_System.Controllers
     {
         private readonly HospitalManagmentDbContext dbContext;
         private readonly IAppointmentRepository appointment;
+        private readonly IMapper mapper;
 
-        public AppointmentController(HospitalManagmentDbContext dbContext,IAppointmentRepository appointment)
+        public AppointmentController(HospitalManagmentDbContext dbContext,IAppointmentRepository appointment, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.appointment = appointment;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult>GetAllAppointment()
         {
+              
             var Appointments= await appointment.GetAllListAsync();
-            if(Appointments==null) 
+            var appintmentdto = mapper.Map<List<AppointmentDTO>>(Appointments);
+            if (Appointments==null) 
             {
                 return NotFound();
             }
                 
-            return Ok(Appointments);
+            return Ok(appintmentdto);
         }
 
 
@@ -37,22 +43,25 @@ namespace Hospital_Management_System.Controllers
         [Route("{id}")]
         public async Task<IActionResult> GetAppointmentByID([FromRoute] Guid id)
         {
-            var Appointment = await appointment.GetListById(id);    
+            var Appointment = await appointment.GetListById(id);
+            var appintmentdto = mapper.Map<AppointmentDTO>(Appointment);
             if (Appointment == null)
             {
 
                 return NotFound();
             }
-            return Ok(Appointment);
+            return Ok(appintmentdto);
         }
 
         [HttpPost]
         [ValidateModelAttributes]
 
-        public async Task<IActionResult> CreateListAsync([FromBody] Appointment addAppointment)
+        public async Task<IActionResult> CreateListAsync([FromBody] AddAppointmentDTO addAppointment)
         {
-            await appointment.CreateListAsync(addAppointment);
-            return CreatedAtAction("GetAppointmentByID", new { ID = addAppointment.Id },addAppointment);
+            var addappointment = mapper.Map<Appointment>(addAppointment);
+            addappointment= await appointment.CreateListAsync(addappointment);
+            var addappointmentDTO= mapper.Map<AppointmentDTO>(addappointment);
+            return Ok(addappointmentDTO);
         }
 
         [HttpPut]

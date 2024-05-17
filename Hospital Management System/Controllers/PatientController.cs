@@ -1,11 +1,13 @@
 ﻿using Hospital_Management_System.Data;
-using Hospital_Management_System.Models;
 using Hospital_Management_System.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Hospital_Management_System.ActionFilters;
 using Microsoft.EntityFrameworkCore.Storage.Json;
+using Hospital_Management_System.Models.DomainModels;
+using AutoMapper;
+using Hospital_Management_System.Models.DTO;
 
 namespace Hospital_Management_System.Controllers
 {
@@ -15,13 +17,13 @@ namespace Hospital_Management_System.Controllers
     {
         private readonly HospitalManagmentDbContext dbContext;
         private readonly IPatientRepository patientRepo;
-       
+        private readonly IMapper mapper;
 
-        public PatientController(HospitalManagmentDbContext dbContext, IPatientRepository patientRepo)
+        public PatientController(HospitalManagmentDbContext dbContext, IPatientRepository patientRepo,IMapper mapper)
         {
             this.dbContext = dbContext;
             this.patientRepo = patientRepo;
-          
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -30,8 +32,11 @@ namespace Hospital_Management_System.Controllers
         {
             
             var patients= await patientRepo.GetAllAsync();
-            return Ok(patients);
+
+            var patientsdto=mapper.Map<List<PatientDTO>>(patients);
             
+            return Ok(patientsdto);
+
         }
 
         [HttpGet]
@@ -39,22 +44,29 @@ namespace Hospital_Management_System.Controllers
 
         public async Task<IActionResult> GetPatientById([FromRoute] Guid id)
         {
-            var Patient = await patientRepo.GetById(id);   
+            var Patient = await patientRepo.GetById(id);
+            var patientsdto = mapper.Map<PatientDTO>(Patient);
+
             if (Patient == null)
             {
                 return NotFound();
             }
 
-            return Ok(Patient);
+            return Ok(patientsdto);
         }
 
         [HttpPost]
         [ValidateModelAttributes]
-        public async Task<IActionResult> Create([FromBody] Patient patient)
+        public async Task<IActionResult> Create([FromBody] addPateintDTO addPateint)
         {
+            var addPatient  = mapper.Map<Patient>(addPateint);
 
-            await patientRepo.CreateAsync(patient);
-            return Ok("New List Created");
+            addPatient= await patientRepo.CreateAsync(addPatient);
+
+
+            var patientdto= mapper.Map<PatientDTO>(addPatient);
+            
+            return Ok(patientdto);
 
 
         }
@@ -62,11 +74,16 @@ namespace Hospital_Management_System.Controllers
         [Route("{id:guid}")]
         [ValidateModelAttributes]
 
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] Patient patient)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdatePatientDTO updatePatientDTO)
         {
-
-            await patientRepo.UpdateAsync(id, patient);
-            return Ok("New List Updated");
+            var updateData = mapper.Map<Patient>(updatePatientDTO);
+            updateData=  await patientRepo.UpdateAsync(id,updateData);
+            if(updateData== null)
+            {
+                return NotFound(id);
+            }
+            var updatedataDTO = mapper.Map<PatientDTO>(updateData);
+            return Ok(updatedataDTO);
         }
 
         [HttpDelete]
@@ -76,16 +93,13 @@ namespace Hospital_Management_System.Controllers
         public async Task <IActionResult> Delete([FromRoute] Guid id) 
         
         {
-            var deletePatient = await dbContext.Patients.FirstOrDefaultAsync(x => x.Id == id);
-            if(deletePatient==null)
+            var deletePatient= await patientRepo.DeleteAsync(id);   
+            if(deletePatient== null)
             {
                 return NotFound();
             }
-           dbContext.Patients.Remove(deletePatient); 
-           await dbContext.SaveChangesAsync();
-
-
-           return Ok("deleted, New List Updated");
+            var deletePatientDTO = mapper.Map<PatientDTO>(deletePatient);
+           return Ok(deletePatientDTO);
         }
     
     }

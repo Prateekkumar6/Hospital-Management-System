@@ -1,9 +1,11 @@
 ﻿using Hospital_Management_System.Data;
-using Hospital_Management_System.Models;
 using Hospital_Management_System.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Hospital_Management_System.ActionFilters;
+using Hospital_Management_System.Models.DomainModels;
+using Hospital_Management_System.Models.DTO;
+using AutoMapper;
 
 namespace Hospital_Management_System.Controllers
 {
@@ -13,11 +15,13 @@ namespace Hospital_Management_System.Controllers
     {
         private readonly HospitalManagmentDbContext dbContext;
         private readonly IMedicalRecordRepository medicalRecordRepository;
+        private readonly IMapper mapper;
 
-        public MedicalRecordController(HospitalManagmentDbContext dbContext,IMedicalRecordRepository medicalRecordRepository)
+        public MedicalRecordController(HospitalManagmentDbContext dbContext,IMedicalRecordRepository medicalRecordRepository, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.medicalRecordRepository = medicalRecordRepository;
+            this.mapper = mapper;
         }
 
 
@@ -50,10 +54,12 @@ namespace Hospital_Management_System.Controllers
         [HttpPost]
         [ValidateModelAttributes]
 
-        public async Task<IActionResult> CreateListAsync([FromBody] MedicalRecord addRecord)
+        public async Task<IActionResult> CreateListAsync([FromBody] AddMedicalRecordDTO addRecord)
         {
-            await medicalRecordRepository.CreateListAsync(addRecord);
-            return CreatedAtAction("GetAppointmentByID", new { ID = addRecord.Id }, addRecord);
+            var addrecord = mapper.Map<MedicalRecord>(addRecord);
+            addrecord=  await medicalRecordRepository.CreateListAsync(addrecord);
+            var addrecorddto = mapper.Map<AddMedicalRecordDTO>(addrecord);
+            return Ok(addrecorddto);
         }
 
         [HttpPut]

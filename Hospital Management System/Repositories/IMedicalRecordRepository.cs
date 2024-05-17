@@ -1,4 +1,4 @@
-﻿using Hospital_Management_System.Models;
+﻿using Hospital_Management_System.Models.DomainModels;
 
 namespace Hospital_Management_System.Repositories
 {

@@ -1,5 +1,5 @@
 ﻿using Hospital_Management_System.Data;
-using Hospital_Management_System.Models;
+using Hospital_Management_System.Models.DomainModels;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;

@@ -1,11 +1,11 @@
 ﻿using Hospital_Management_System.Data;
-using Hospital_Management_System.Models;
 using Hospital_Management_System.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
 using Hospital_Management_System.ActionFilters;
+using Hospital_Management_System.Models.DomainModels;
 namespace Hospital_Management_System.Controllers
 {
     [Route("api/[controller]")]

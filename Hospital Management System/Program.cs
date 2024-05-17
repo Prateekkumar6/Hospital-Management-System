@@ -1,6 +1,9 @@
+using AutoMapper;
 using Hospital_Management_System.Data;
+using Hospital_Management_System.Mappings;
 using Hospital_Management_System.Repositories;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,7 @@ builder.Services.AddScoped<IDoctorRepository, SqlDoctorRepository>();
 builder.Services.AddScoped<IAppointmentRepository, SqlAppointmentRepository>();
 builder.Services.AddScoped<IMedicalRecordRepository, SqlMedicalRecordRepository>();
 builder.Services.AddScoped<IPatientRepository, SqlPatientRepository>();
+builder.Services.AddAutoMapper(typeof(AutomapperProfiles));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
