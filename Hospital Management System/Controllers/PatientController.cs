@@ -27,6 +27,7 @@ namespace Hospital_Management_System.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllPatientList")]
 
         public async Task<IActionResult> GetAllPatientList()
         {

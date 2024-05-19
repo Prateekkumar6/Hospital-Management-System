@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatientManagementSystemMicroservice", "Hospital Management System\PatientManagementSystemMicroservice.csproj", "{9BD84D65-CC4C-4C09-BE83-B83DDCADBBC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HospitalManagmentAPIGateway", "HospitalManagmentAPIGateway\HospitalManagmentAPIGateway.csproj", "{3DBB3106-8C5B-4630-99C2-A59388DB3E8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{9BD84D65-CC4C-4C09-BE83-B83DDCADBBC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BD84D65-CC4C-4C09-BE83-B83DDCADBBC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BD84D65-CC4C-4C09-BE83-B83DDCADBBC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DBB3106-8C5B-4630-99C2-A59388DB3E8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DBB3106-8C5B-4630-99C2-A59388DB3E8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DBB3106-8C5B-4630-99C2-A59388DB3E8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DBB3106-8C5B-4630-99C2-A59388DB3E8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
