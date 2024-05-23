@@ -11,7 +11,7 @@ using Hospital_Management_System.Models.DTO;
 
 namespace Hospital_Management_System.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/patient")]
     [ApiController]
     public class PatientController : ControllerBase
     {
@@ -27,7 +27,7 @@ namespace Hospital_Management_System.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllPatientList")]
+        
 
         public async Task<IActionResult> GetAllPatientList()
         {
